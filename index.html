@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIEN STUDIO — Photography & Film</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0d0b;
+      --cream: #f5f0e8;
+      --warm: #e8dfc8;
+      --gold: #b8975a;
+      --gold-light: #d4b67a;
+      --muted: #6b6355;
+      --grain-opacity: 0.045;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Custom Cursor ── */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
+      opacity: 0.6;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ── Grain Overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 3rem;
+      mix-blend-mode: multiply;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      padding: 0 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 68% 42%, rgba(184,151,90,0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(184,151,90,0.07) 0%, transparent 60%);
+    }
+    .hero-left { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-desc {
+      margin-top: 2rem;
+      font-size: 0.72rem;
+      line-height: 1.9;
+      color: var(--muted);
+      max-width: 360px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.75s forwards;
+    }
+    .hero-cta {
+      margin-top: 3rem;
+      display: inline-flex;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.95s forwards;
+    }
+    .btn-primary {
+      padding: 0.85rem 2.2rem;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: none;
+      transition: background 0.25s, color 0.25s;
+    }
+    .btn-primary:hover { background: var(--gold); color: var(--ink); }
+    .btn-ghost {
+      padding: 0.85rem 2.2rem;
+      border: 1px solid rgba(13,13,11,0.25);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.25s, color 0.25s;
+      cursor: none;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-right {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1.2rem;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.6s forwards;
+    }
+    .hero-frame {
+      width: 78%;
+      aspect-ratio: 4/5;
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(184,151,90,0.18) 0%, transparent 50%),
+        linear-gradient(to bottom, transparent 40%, rgba(13,13,11,0.55) 100%);
+    }
+    .frame-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* Cinematic film placeholder art */
+    .film-art {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: linear-gradient(160deg, #1a1710 0%, #2d2618 40%, #0d0d0b 100%);
+    }
+    .film-art::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 55% 45%, rgba(184,151,90,0.22) 0%, transparent 65%),
+        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(255,255,255,0.015) 38px, rgba(255,255,255,0.015) 39px);
+    }
+    .film-icon {
+      position: absolute;
+      bottom: 2rem; left: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: rgba(184,151,90,0.7);
+      text-transform: uppercase;
+    }
+    .hero-stat {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-align: right;
+    }
+    .hero-stat span {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-bar {
+      border-top: 1px solid rgba(13,13,11,0.1);
+      border-bottom: 1px solid rgba(13,13,11,0.1);
+      padding: 0.9rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      background: var(--warm);
+    }
+    .marquee-inner {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-inner span {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 2.5rem;
+    }
+    .marquee-inner span.dot { color: var(--gold); }
+
+    /* ── SERVICES ── */
+    .section { padding: 7rem 3rem; }
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184,151,90,0.3);
+      max-width: 80px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(13,13,11,0.1);
+    }
+    .service-card {
+      padding: 3rem 2.5rem 3rem 0;
+      border-right: 1px solid rgba(13,13,11,0.1);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .service-card:last-child { border-right: none; padding-right: 0; }
+    .service-card:first-child { padding-left: 0; }
+    .service-card:not(:first-child) { padding-left: 2.5rem; }
+    .service-card:hover { background: rgba(184,151,90,0.04); }
+    .service-num {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+    }
+    .service-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      color: var(--ink);
+    }
+    .service-desc {
+      font-size: 0.68rem;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+    .service-list {
+      margin-top: 1.5rem;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .service-list li {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .service-list li::before {
+      content: '—';
+      color: var(--gold);
+      font-size: 0.6rem;
+    }
+
+    /* ── ABOUT / SPLIT ── */
+    .about-section {
+      padding: 7rem 3rem;
+      background: var(--ink);
+      color: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-section .section-label { color: var(--gold-light); }
+    .about-section .section-label::after { background: rgba(212,182,122,0.3); }
+    .about-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    .about-title em { font-style: italic; color: var(--gold-light); }
+    .about-body {
+      font-size: 0.7rem;
+      line-height: 2;
+      color: rgba(245,240,232,0.65);
+      margin-bottom: 2rem;
+    }
+    .about-right { position: relative; }
+    .about-frame-stack { position: relative; height: 520px; }
+    .about-frame {
+      position: absolute;
+      background: #1a1710;
+      border: 1px solid rgba(184,151,90,0.2);
+    }
+    .about-frame-1 {
+      width: 75%; aspect-ratio: 3/4;
+      top: 0; right: 0;
+      background: linear-gradient(145deg, #1e1b14 0%, #0d0d0b 100%);
+    }
+    .about-frame-2 {
+      width: 52%; aspect-ratio: 4/3;
+      bottom: 0; left: 0;
+      background: linear-gradient(145deg, #2a2318 0%, #1a1710 100%);
+    }
+    .about-frame-1::before, .about-frame-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(184,151,90,0.12) 0%, transparent 70%);
+    }
+    .about-tag {
+      position: absolute;
+      bottom: 1.5rem; left: 1.5rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(184,151,90,0.6);
+    }
+    .stats-row {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(245,240,232,0.1);
+    }
+    .stat-item {}
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-top: 0.4rem;
+    }
+
+    /* ── PORTFOLIO GRID ── */
+    .portfolio-section { padding: 7rem 3rem; }
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+    .portfolio-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.1;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 280px 220px;
+      gap: 1rem;
+    }
+    .portfolio-item {
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .portfolio-item:first-child { grid-row: 1 / 3; }
+    .portfolio-item-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s ease;
+    }
+    .portfolio-item:hover .portfolio-item-bg { transform: scale(1.04); }
+    .pi-1 { background: linear-gradient(145deg, #1e1b14 0%, #0d0d0b 60%, #1a1410 100%); }
+    .pi-1::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 60% 40%, rgba(184,151,90,0.18) 0%, transparent 65%); }
+    .pi-2 { background: linear-gradient(160deg, #14181e 0%, #0d0d0b 100%); }
+    .pi-2::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 40% 60%, rgba(90,120,184,0.12) 0%, transparent 65%); }
+    .pi-3 { background: linear-gradient(145deg, #1e1410 0%, #0d0d0b 100%); }
+    .pi-3::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 55% 45%, rgba(184,120,90,0.13) 0%, transparent 65%); }
+    .pi-4 { background: linear-gradient(145deg, #141e14 0%, #0d0d0b 100%); }
+    .pi-4::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 45% 55%, rgba(90,184,120,0.1) 0%, transparent 65%); }
+    .pi-5 { background: linear-gradient(145deg, #1a141e 0%, #0d0d0b 100%); }
+    .pi-5::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(140,90,184,0.11) 0%, transparent 65%); }
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,13,11,0.8) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-tag {
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 0.4rem;
+    }
+    .portfolio-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--cream);
+    }
+    /* aperture decorative element */
+    .aperture {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px; height: 70px;
+      opacity: 0.06;
+    }
+    .aperture circle { fill: none; stroke: var(--cream); stroke-width: 1; }
+    .aperture line { stroke: var(--cream); stroke-width: 0.8; }
+
+    /* ── PROCESS ── */
+    .process-section { padding: 7rem 3rem; background: var(--warm); }
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 3rem;
+    }
+    .process-step {
+      padding: 2.5rem 2rem 2.5rem 0;
+      border-right: 1px solid rgba(13,13,11,0.12);
+      position: relative;
+    }
+    .process-step:last-child { border-right: none; }
+    .process-step:not(:first-child) { padding-left: 2rem; }
+    .process-arrow {
+      position: absolute;
+      top: 2.5rem; right: -0.8rem;
+      font-size: 0.65rem;
+      color: var(--gold);
+      z-index: 2;
+    }
+    .process-step:last-child .process-arrow { display: none; }
+    .process-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(184,151,90,0.2);
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+    .process-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 0.8rem;
+      color: var(--ink);
+    }
+    .process-body {
+      font-size: 0.67rem;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      padding: 8rem 3rem;
+      background: var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .contact-title em { font-style: italic; color: var(--gold-light); }
+    .contact-sub {
+      font-size: 0.7rem;
+      line-height: 1.9;
+      color: rgba(245,240,232,0.5);
+      margin-bottom: 3rem;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .contact-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+    .form-input, .form-textarea {
+      background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(245,240,232,0.1);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.9rem 1.1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      cursor: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: rgba(184,151,90,0.5);
+    }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-submit {
+      margin-top: 0.5rem;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: none;
+      align-self: flex-start;
+      transition: background 0.25s;
+    }
+    .form-submit:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 3rem;
+      background: #080807;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(184,151,90,0.12);
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+    .footer-copy {
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: rgba(245,240,232,0.2);
+    }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SCROLL REVEALS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 5rem 1.5rem 3rem; min-height: auto; }
+      .hero-right { align-items: flex-start; margin-top: 3rem; }
+      .hero-frame { width: 90%; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid rgba(13,13,11,0.1); padding: 2.5rem 0; }
+      .about-section { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .portfolio-item:first-child { grid-row: auto; grid-column: 1 / 3; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .contact-section { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+      .section { padding: 4rem 1.5rem; }
+      .portfolio-section { padding: 4rem 1.5rem; }
+      .process-section { padding: 4rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Lumien Studio</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-left">
+      <p class="hero-eyebrow">Photography &amp; Film Production LLC</p>
+      <h1 class="hero-title">
+        We capture<br />
+        <em>light</em> as<br />
+        language.
+      </h1>
+      <p class="hero-desc">
+        Lumien Studio is a full-service visual production company — crafting editorial photography, cinematic video, and brand films that endure.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Book a Session</a>
+        <a href="#portfolio" class="btn-ghost">View Work</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat">
+        <span>8+</span>
+        Years of production
+      </div>
+      <div class="hero-frame">
+        <div class="frame-inner">
+          <div class="film-art">
+            <svg class="aperture" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="30"/>
+              <circle cx="35" cy="35" r="18"/>
+              <circle cx="35" cy="35" r="6"/>
+              <line x1="35" y1="5" x2="35" y2="65"/>
+              <line x1="5" y1="35" x2="65" y2="35"/>
+              <line x1="13" y1="13" x2="57" y2="57"/>
+              <line x1="57" y1="13" x2="13" y2="57"/>
+            </svg>
+            <div class="film-icon">Est. 2016 — LLC</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <span>340+</span>
+        Projects delivered
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-bar">
+    <div class="marquee-inner">
+      <span>Editorial Photography</span><span class="dot">◆</span>
+      <span>Brand Films</span><span class="dot">◆</span>
+      <span>Commercial Video</span><span class="dot">◆</span>
+      <span>Event Coverage</span><span class="dot">◆</span>
+      <span>Portrait Sessions</span><span class="dot">◆</span>
+      <span>Real Estate Media</span><span class="dot">◆</span>
+      <span>Documentary</span><span class="dot">◆</span>
+      <span>Post-Production</span><span class="dot">◆</span>
+      <span>Color Grading</span><span class="dot">◆</span>
+      <span>Aerial Cinematography</span><span class="dot">◆</span>
+      <span>Editorial Photography</span><span class="dot">◆</span>
+      <span>Brand Films</span><span class="dot">◆</span>
+      <span>Commercial Video</span><span class="dot">◆</span>
+      <span>Event Coverage</span><span class="dot">◆</span>
+      <span>Portrait Sessions</span><span class="dot">◆</span>
+      <span>Real Estate Media</span><span class="dot">◆</span>
+      <span>Documentary</span><span class="dot">◆</span>
+      <span>Post-Production</span><span class="dot">◆</span>
+      <span>Color Grading</span><span class="dot">◆</span>
+      <span>Aerial Cinematography</span><span class="dot">◆</span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" class="section">
+    <div class="section-label">What We Do</div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <h3 class="service-title">Photography</h3>
+        <p class="service-desc">From intimate portrait sessions to high-volume commercial shoots — we bring technical mastery and a distinct visual voice to every frame.</p>
+        <ul class="service-list">
+          <li>Editorial &amp; Portrait</li>
+          <li>Commercial &amp; Product</li>
+          <li>Event &amp; Corporate</li>
+          <li>Real Estate &amp; Architecture</li>
+          <li>Lifestyle &amp; Brand</li>
+        </ul>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <h3 class="service-title">Video<br/>Production</h3>
+        <p class="service-desc">Full-service cinematic video from concept to final cut. We handle everything — scripting, crew, locations, editing, and color finishing.</p>
+        <ul class="service-list">
+          <li>Brand &amp; Corporate Films</li>
+          <li>Commercials &amp; Ads</li>
+          <li>Event Videography</li>
+          <li>Documentary Style</li>
+          <li>Social Media Content</li>
+        </ul>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <h3 class="service-title">Post &amp;<br/>Finishing</h3>
+        <p class="service-desc">Professional post-production services that elevate raw footage into polished, broadcast-ready deliverables with lasting visual impact.</p>
+        <ul class="service-list">
+          <li>Video Editing &amp; Assembly</li>
+          <li>Cinematic Color Grading</li>
+          <li>Photo Retouching</li>
+          <li>Motion Graphics</li>
+          <li>Sound Design &amp; Mix</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio" class="portfolio-section">
+    <div class="portfolio-header reveal">
+      <div>
+        <div class="section-label">Selected Work</div>
+        <h2 class="portfolio-title">A frame is a<br/><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">decision.</em></h2>
+      </div>
+      <a href="#contact" class="btn-ghost">View All Projects →</a>
+    </div>
+    <div class="portfolio-grid reveal">
+      <div class="portfolio-item">
+        <div class="portfolio-item-bg pi-1"></div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Brand Film</div>
+          <div class="portfolio-name">Harvest Collective — Brand Identity</div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-item-bg pi-2"></div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Editorial</div>
+          <div class="portfolio-name">Winter Light Series</div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-item-bg pi-3"></div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Commercial</div>
+          <div class="portfolio-name">Ember Spirits Launch</div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-item-bg pi-4"></div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Documentary</div>
+          <div class="portfolio-name">Roots &amp; Routes</div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-item-bg pi-5"></div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Architecture</div>
+          <div class="portfolio-name">The Meridian Tower</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section">
+    <div class="about-left reveal">
+      <div class="section-label">Who We Are</div>
+      <h2 class="about-title">Visual storytellers<br/><em>rooted</em> in craft.</h2>
+      <p class="about-body">
+        Lumien Studio LLC was founded on a single belief: that the best visual work comes from deep listening and uncompromising craft. We are a small, dedicated team of photographers and filmmakers — each bringing a unique eye shaped by years of editorial, commercial, and documentary work.
+      </p>
+      <p class="about-body">
+        We work with brands, agencies, and individuals who understand that powerful imagery is not decoration — it's communication. Our process is collaborative, transparent, and built around your specific vision and goals.
+      </p>
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-num">340+</div>
+          <div class="stat-label">Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Years</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">60+</div>
+          <div class="stat-label">Clients</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-frame-stack">
+        <div class="about-frame about-frame-1">
+          <svg class="aperture" viewBox="0 0 70 70" style="opacity:0.08;top:50%;left:50%;transform:translate(-50%,-50%)">
+            <circle cx="35" cy="35" r="30"/>
+            <circle cx="35" cy="35" r="20"/>
+            <circle cx="35" cy="35" r="8"/>
+            <line x1="35" y1="5" x2="35" y2="65"/>
+            <line x1="5" y1="35" x2="65" y2="35"/>
+          </svg>
+          <div class="about-tag">Photography Portfolio</div>
+        </div>
+        <div class="about-frame about-frame-2">
+          <div class="about-tag">Film &amp; Video</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process-section">
+    <div class="section-label reveal">How We Work</div>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <div class="process-arrow">→</div>
+        <div class="process-num">01</div>
+        <h3 class="process-title">Discovery</h3>
+        <p class="process-body">We start with an in-depth conversation about your goals, audience, and visual identity. Every project is unique — we treat it that way.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="process-arrow">→</div>
+        <div class="process-num">02</div>
+        <h3 class="process-title">Pre-Production</h3>
+        <p class="process-body">Moodboards, shot lists, locations, talent, and schedules — we handle every detail so the shoot day runs seamlessly.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="process-arrow">→</div>
+        <div class="process-num">03</div>
+        <h3 class="process-title">Production</h3>
+        <p class="process-body">On the day, our team executes with precision and creative flexibility — capturing the images and footage that tell your story.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="process-num">04</div>
+        <h3 class="process-title">Delivery</h3>
+        <p class="process-body">Post-production, color grading, retouching, and final delivery in all formats you need — on time, every time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="reveal">
+      <div class="section-label" style="color:var(--gold-light);">Let's Create</div>
+      <h2 class="contact-title">Ready to tell<br/>your <em>story?</em></h2>
+      <p class="contact-sub">We take on a limited number of projects each season to ensure every client receives our full creative attention. Reach out to check availability.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">hello@lumienstudio.com</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">+1 (555) 240-8810</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Studio Location</span>
+          <span class="contact-value">Detroit Metro Area, Michigan</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Availability</span>
+          <span class="contact-value">Booking Q3 &amp; Q4 2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-label" style="color:var(--gold-light);">Send a Message</div>
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="Jane" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Doe" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="jane@company.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Project Type</label>
+          <input type="text" class="form-input" placeholder="Brand Film / Photography / Both" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell Us About Your Project</label>
+          <textarea class="form-textarea" placeholder="A brief overview of your project, timeline, and budget range..."></textarea>
+        </div>
+        <button class="form-submit">Send Inquiry →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Lumien Studio LLC</div>
+    <div class="footer-copy">© 2026 Lumien Studio LLC. All rights reserved.</div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+
+    document.querySelectorAll('a, button, input, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '18px';
+        cursor.style.height = '18px';
+        ring.style.width = '52px';
+        ring.style.height = '52px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), 80);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => obs.observe(el));
+
+    // Stagger sibling reveals
+    document.querySelectorAll('.services-grid, .process-grid').forEach(grid => {
+      grid.querySelectorAll('.reveal').forEach((el, i) => {
+        el.style.transitionDelay = (i * 0.12) + 's';
+      });
+    });
+
+    // Form submit
+    document.querySelector('.form-submit').addEventListener('click', function() {
+      this.textContent = 'Sent ✓';
+      this.style.background = '#4a7c4e';
+      this.style.color = '#f5f0e8';
+      setTimeout(() => {
+        this.textContent = 'Send Inquiry →';
+        this.style.background = '';
+        this.style.color = '';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
