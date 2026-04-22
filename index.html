@@ -10,13 +10,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink: #0d0d0b;
-      --cream: #f5f0e8;
-      --warm: #e8dfc8;
-      --gold: #b8975a;
-      --gold-light: #d4b67a;
-      --muted: #6b6355;
-      --grain-opacity: 0.045;
+      --ink: #0e0b14;
+      --cream: #f2eff8;
+      --warm: #e4dff0;
+      --gold: #7c3aed;
+      --gold-light: #a78bfa;
+      --muted: #5b5270;
+      --grain-opacity: 0.04;
     }
 
     html { scroll-behavior: smooth; }
@@ -112,8 +112,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 70% 60% at 68% 42%, rgba(184,151,90,0.13) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(184,151,90,0.07) 0%, transparent 60%);
+        radial-gradient(ellipse 70% 60% at 68% 42%, rgba(124,58,237,0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(124,58,237,0.07) 0%, transparent 60%);
     }
     .hero-left { position: relative; z-index: 2; }
     .hero-eyebrow {
@@ -165,7 +165,7 @@
       cursor: none;
       transition: background 0.25s, color 0.25s;
     }
-    .btn-primary:hover { background: var(--gold); color: var(--ink); }
+    .btn-primary:hover { background: var(--gold); color: var(--cream); }
     .btn-ghost {
       padding: 0.85rem 2.2rem;
       border: 1px solid rgba(13,13,11,0.25);
@@ -202,8 +202,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(135deg, rgba(184,151,90,0.18) 0%, transparent 50%),
-        linear-gradient(to bottom, transparent 40%, rgba(13,13,11,0.55) 100%);
+        linear-gradient(135deg, rgba(124,58,237,0.18) 0%, transparent 50%),
+        linear-gradient(to bottom, transparent 40%, rgba(14,11,20,0.55) 100%);
     }
     .frame-inner {
       width: 100%;
@@ -218,14 +218,14 @@
       width: 100%;
       height: 100%;
       position: relative;
-      background: linear-gradient(160deg, #1a1710 0%, #2d2618 40%, #0d0d0b 100%);
+      background: linear-gradient(160deg, #1a1424 0%, #2d1f45 40%, #0e0b14 100%);
     }
     .film-art::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 55% at 55% 45%, rgba(184,151,90,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 55% at 55% 45%, rgba(124,58,237,0.22) 0%, transparent 65%),
         repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(255,255,255,0.015) 38px, rgba(255,255,255,0.015) 39px);
     }
     .film-icon {
@@ -291,7 +291,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: rgba(184,151,90,0.3);
+      background: rgba(124,58,237,0.3);
       max-width: 80px;
     }
     .services-grid {
@@ -353,7 +353,7 @@
     /* ── ABOUT / SPLIT ── */
     .about-section {
       padding: 7rem 3rem;
-      background: var(--ink);
+      background: #0e0b14;
       color: var(--cream);
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -361,7 +361,7 @@
       align-items: center;
     }
     .about-section .section-label { color: var(--gold-light); }
-    .about-section .section-label::after { background: rgba(212,182,122,0.3); }
+    .about-section .section-label::after { background: rgba(167,139,250,0.3); }
     .about-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.5rem, 4vw, 3.8rem);
@@ -380,24 +380,24 @@
     .about-frame-stack { position: relative; height: 520px; }
     .about-frame {
       position: absolute;
-      background: #1a1710;
-      border: 1px solid rgba(184,151,90,0.2);
+      background: #1a1030;
+      border: 1px solid rgba(124,58,237,0.2);
     }
     .about-frame-1 {
       width: 75%; aspect-ratio: 3/4;
       top: 0; right: 0;
-      background: linear-gradient(145deg, #1e1b14 0%, #0d0d0b 100%);
+      background: linear-gradient(145deg, #1e1430 0%, #0e0b14 100%);
     }
     .about-frame-2 {
       width: 52%; aspect-ratio: 4/3;
       bottom: 0; left: 0;
-      background: linear-gradient(145deg, #2a2318 0%, #1a1710 100%);
+      background: linear-gradient(145deg, #2a1845 0%, #1a1030 100%);
     }
     .about-frame-1::before, .about-frame-2::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(184,151,90,0.12) 0%, transparent 70%);
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(124,58,237,0.12) 0%, transparent 70%);
     }
     .about-tag {
       position: absolute;
@@ -463,16 +463,16 @@
       transition: transform 0.6s ease;
     }
     .portfolio-item:hover .portfolio-item-bg { transform: scale(1.04); }
-    .pi-1 { background: linear-gradient(145deg, #1e1b14 0%, #0d0d0b 60%, #1a1410 100%); }
-    .pi-1::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 60% 40%, rgba(184,151,90,0.18) 0%, transparent 65%); }
-    .pi-2 { background: linear-gradient(160deg, #14181e 0%, #0d0d0b 100%); }
-    .pi-2::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 40% 60%, rgba(90,120,184,0.12) 0%, transparent 65%); }
-    .pi-3 { background: linear-gradient(145deg, #1e1410 0%, #0d0d0b 100%); }
-    .pi-3::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 55% 45%, rgba(184,120,90,0.13) 0%, transparent 65%); }
-    .pi-4 { background: linear-gradient(145deg, #141e14 0%, #0d0d0b 100%); }
-    .pi-4::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 45% 55%, rgba(90,184,120,0.1) 0%, transparent 65%); }
-    .pi-5 { background: linear-gradient(145deg, #1a141e 0%, #0d0d0b 100%); }
-    .pi-5::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(140,90,184,0.11) 0%, transparent 65%); }
+    .pi-1 { background: linear-gradient(145deg, #1e1430 0%, #0e0b14 60%, #1a0f28 100%); }
+    .pi-1::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 60% 40%, rgba(124,58,237,0.22) 0%, transparent 65%); }
+    .pi-2 { background: linear-gradient(160deg, #140e28 0%, #0e0b14 100%); }
+    .pi-2::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 40% 60%, rgba(167,139,250,0.15) 0%, transparent 65%); }
+    .pi-3 { background: linear-gradient(145deg, #1e1030 0%, #0e0b14 100%); }
+    .pi-3::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 55% 45%, rgba(109,40,217,0.18) 0%, transparent 65%); }
+    .pi-4 { background: linear-gradient(145deg, #18102e 0%, #0e0b14 100%); }
+    .pi-4::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 55% at 45% 55%, rgba(139,92,246,0.14) 0%, transparent 65%); }
+    .pi-5 { background: linear-gradient(145deg, #1a0e38 0%, #0e0b14 100%); }
+    .pi-5::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(196,167,255,0.12) 0%, transparent 65%); }
     .portfolio-overlay {
       position: absolute;
       inset: 0;
@@ -556,7 +556,7 @@
     /* ── CONTACT ── */
     .contact-section {
       padding: 8rem 3rem;
-      background: var(--ink);
+      background: #0e0b14;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6rem;
@@ -625,7 +625,7 @@
       margin-top: 0.5rem;
       padding: 1rem 2.5rem;
       background: var(--gold);
-      color: var(--ink);
+      color: var(--cream);
       border: none;
       font-family: 'DM Mono', monospace;
       font-size: 0.62rem;
@@ -635,16 +635,16 @@
       align-self: flex-start;
       transition: background 0.25s;
     }
-    .form-submit:hover { background: var(--gold-light); }
+    .form-submit:hover { background: var(--gold-light); color: var(--ink); }
 
     /* ── FOOTER ── */
     footer {
       padding: 2.5rem 3rem;
-      background: #080807;
+      background: #080510;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid rgba(184,151,90,0.12);
+      border-top: 1px solid rgba(124,58,237,0.2);
     }
     .footer-logo {
       font-family: 'Cormorant Garamond', serif;
@@ -926,7 +926,7 @@
     <div class="about-right reveal">
       <div class="about-frame-stack">
         <div class="about-frame about-frame-1">
-          <svg class="aperture" viewBox="0 0 70 70" style="opacity:0.08;top:50%;left:50%;transform:translate(-50%,-50%)">
+          <svg class="aperture" viewBox="0 0 70 70" style="opacity:0.08;top:50%;left:50%;transform:translate(-50%,-50%);position:absolute">>
             <circle cx="35" cy="35" r="30"/>
             <circle cx="35" cy="35" r="20"/>
             <circle cx="35" cy="35" r="8"/>
